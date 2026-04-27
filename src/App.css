@@ -504,4 +504,117 @@ body {
 
   /* Tags */
   .badge { font-size: 0.6rem; }
+  /* ── BUSCADOR ────────────────────────────────── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: border-color var(--transition);
+}
+
+.search-bar:focus-within {
+  border-color: var(--gold);
+}
+
+.search-icon { font-size: 1rem; }
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--black);
+}
+
+.search-bar input::placeholder { color: var(--muted); }
+
+.search-clear {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: color var(--transition);
+}
+
+.search-clear:hover { color: var(--black); }
+
+/* ── FILTROS ─────────────────────────────────── */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filtro-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all var(--transition);
+}
+
+.filtro-btn:hover {
+  border-color: var(--gold-lt);
+  color: var(--black);
+}
+
+.filtro-btn.active {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--gold);
+}
+
+/* ── FAV BUTTON EN CARD ──────────────────────── */
+.card-img-wrap {
+  position: relative;
+}
+
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255,255,255,0.85);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: transform var(--transition), background var(--transition);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.fav-btn:hover { transform: scale(1.15); }
+
+.fav-btn.fav-active {
+  background: rgba(255,255,255,0.95);
+}
+
+/* ── RESPONSIVE BUSCADOR Y FILTROS ───────────── */
+@media (max-width: 480px) {
+  .search-bar { padding: 0.6rem 1rem; }
+  .filtros { gap: 0.4rem; }
+  .filtro-btn { font-size: 0.62rem; padding: 4px 12px; }
+}
 }
