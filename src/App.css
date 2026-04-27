@@ -395,116 +395,7 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
 
-/* ── SCROLLBAR ───────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--gold-lt); border-radius: 3px; }
-
-
-/* ── SELECTION ───────────────────────────────── */
-::selection { background: var(--gold-lt); color: var(--black); }
-/* ── RESPONSIVE ──────────────────────────────── */
-
-/* Tablet: 768px */
-@media (max-width: 768px) {
-
-  /* Navbar */
-  .navbar {
-    justify-content: flex-start;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-left: 1rem;
-  }
-  .navbar::-webkit-scrollbar { display: none; }
-  .navbar::before { display: none; }
-  .navbar a {
-    padding: 0.9rem 1rem;
-    font-size: 0.65rem;
-    white-space: nowrap;
-  }
-
-  /* Page */
-  .page {
-    padding: 2rem 1.25rem 4rem;
-  }
-  .page h1 {
-    font-size: clamp(2rem, 8vw, 3rem);
-  }
-
-  /* Grid: 2 columnas */
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  /* Stats: 2 columnas */
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Perfil */
-  .perfil-card {
-    padding: 2rem 1.5rem;
-  }
-}
-
-/* Mobile: 480px */
-@media (max-width: 480px) {
-
-  /* Page */
-  .page {
-    padding: 1.5rem 1rem 5rem;
-  }
-  .page h1 {
-    font-size: clamp(1.8rem, 9vw, 2.5rem);
-  }
-  .page h2 {
-    font-size: 1.1rem;
-  }
-
-  /* Grid: 1 columna */
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Stats: 2 columnas compactas */
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-  .stat-num { font-size: 1.5rem; }
-
-  /* Card imagen más compacta */
-  .card img { height: 160px; }
-
-  /* Perfil */
-  .perfil-card {
-    padding: 1.75rem 1.25rem;
-    border-radius: var(--radius-md);
-  }
-  .avatar {
-    width: 70px;
-    height: 70px;
-    font-size: 1.2rem;
-  }
-  .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-    padding: 0.65rem 0;
-  }
-
-  /* Carrito bar */
-  .carrito-bar {
-    width: 90%;
-    text-align: center;
-    font-size: 0.7rem;
-    padding: 0.85rem 1rem;
-  }
-
-  /* Tags */
-  .badge { font-size: 0.6rem; }
-  /* ── BUSCADOR ────────────────────────────────── */
+/* ── BUSCADOR ────────────────────────────────── */
 .search-bar {
   display: flex;
   align-items: center;
@@ -611,10 +502,51 @@ body {
   background: rgba(255,255,255,0.95);
 }
 
-/* ── RESPONSIVE BUSCADOR Y FILTROS ───────────── */
+/* ── SCROLLBAR ───────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold-lt); border-radius: 3px; }
+
+/* ── SELECTION ───────────────────────────────── */
+::selection { background: var(--gold-lt); color: var(--black); }
+
+/* ── RESPONSIVE ──────────────────────────────── */
+
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-left: 1rem;
+  }
+  .navbar::-webkit-scrollbar { display: none; }
+  .navbar::before { display: none; }
+  .navbar a {
+    padding: 0.9rem 1rem;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+  .page { padding: 2rem 1.25rem 4rem; }
+  .page h1 { font-size: clamp(2rem, 8vw, 3rem); }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .perfil-card { padding: 2rem 1.5rem; }
+}
+
 @media (max-width: 480px) {
+  .page { padding: 1.5rem 1rem 5rem; }
+  .page h1 { font-size: clamp(1.8rem, 9vw, 2.5rem); }
+  .page h2 { font-size: 1.1rem; }
+  .grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .stat-num { font-size: 1.5rem; }
+  .card img { height: 160px; }
+  .perfil-card { padding: 1.75rem 1.25rem; border-radius: var(--radius-md); }
+  .avatar { width: 70px; height: 70px; font-size: 1.2rem; }
+  .info-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; padding: 0.65rem 0; }
+  .carrito-bar { width: 90%; text-align: center; font-size: 0.7rem; padding: 0.85rem 1rem; }
+  .badge { font-size: 0.6rem; }
   .search-bar { padding: 0.6rem 1rem; }
   .filtros { gap: 0.4rem; }
   .filtro-btn { font-size: 0.62rem; padding: 4px 12px; }
-}
 }
