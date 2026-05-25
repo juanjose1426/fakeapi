@@ -1,59 +1,64 @@
-"use client";
 
+"use client";
+ 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
-
-export default function RegisterPage() {
-  const [nombre, setNombre] = useState<string>("");
+ 
+export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
-  const [telefono, setTelefono] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [messageType, setMessageType] = useState<"success" | "error" | null>(null);
   const navigate = useNavigate();
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+ 
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-
-    const { error } = await supabase.auth.signUp({ email, password });
-
+ 
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-
+ 
     if (error) {
       setMessageType("error");
-      setMessage("Error en registro: " + error.message);
+      setMessage("Error al iniciar sesión: " + error.message);
       return;
     }
-
-    setMessageType("success");
-    setMessage("Registro exitoso. Redirigiendo al login...");
-    setTimeout(() => navigate("/login"), 2000);
+ 
+    if (data.user) {
+      setMessageType("success");
+      setMessage("Bienvenido. Sesión iniciada correctamente.");
+      setTimeout(() => navigate("/home"), 1000);
+    } else {
+      setMessageType("error");
+      setMessage("No se encontró el usuario.");
+    }
   };
-
+ 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap');
-
+ 
         :root {
           --cream:   #faf8f4;
           --black:   #0a0a0a;
+          --charcoal:#1c1c1c;
           --gold:    #c9a84c;
           --gold-lt: #e8d5a3;
           --muted:   #7a7672;
           --border:  #e0dbd3;
+          --card-bg: #ffffff;
           --font-display: 'Playfair Display', Georgia, serif;
           --font-body:    'Cormorant Garamond', serif;
           --font-ui:      'DM Sans', sans-serif;
           --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
+ 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
         .auth-root {
           min-height: 100vh;
           display: grid;
@@ -62,8 +67,75 @@ export default function RegisterPage() {
           font-family: var(--font-ui);
           cursor: crosshair;
         }
-
-        /* Form side — left on register */
+ 
+        /* Left decorative panel */
+        .auth-panel {
+          background: var(--black);
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 3rem;
+          position: relative;
+          overflow: hidden;
+        }
+ 
+        .auth-panel::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse 60% 50% at 20% 80%, rgba(201,168,76,0.15) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 60% at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 60%);
+          pointer-events: none;
+        }
+ 
+        .panel-logo {
+          font-family: var(--font-display);
+          font-size: 0.75rem;
+          letter-spacing: 0.55em;
+          color: var(--gold);
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+ 
+        .panel-headline {
+          position: relative;
+          z-index: 1;
+        }
+ 
+        .panel-headline h2 {
+          font-family: var(--font-display);
+          font-size: clamp(2.8rem, 4vw, 4.5rem);
+          font-weight: 900;
+          color: var(--cream);
+          line-height: 1.05;
+          letter-spacing: -0.02em;
+          margin-bottom: 1.25rem;
+        }
+ 
+        .panel-headline h2 em {
+          font-style: italic;
+          color: var(--gold);
+        }
+ 
+        .panel-headline p {
+          font-family: var(--font-body);
+          font-size: 1.1rem;
+          color: rgba(250,248,244,0.45);
+          line-height: 1.7;
+          font-style: italic;
+          max-width: 320px;
+        }
+ 
+        .panel-footer {
+          font-family: var(--font-ui);
+          font-size: 0.65rem;
+          letter-spacing: 0.2em;
+          color: rgba(250,248,244,0.25);
+          text-transform: uppercase;
+        }
+ 
+        /* Right form panel */
         .auth-form-side {
           display: flex;
           align-items: center;
@@ -72,17 +144,17 @@ export default function RegisterPage() {
           background: var(--cream);
           animation: slideIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
         }
-
+ 
         @keyframes slideIn {
-          from { opacity: 0; transform: translateX(-24px); }
+          from { opacity: 0; transform: translateX(24px); }
           to   { opacity: 1; transform: translateX(0); }
         }
-
+ 
         .auth-inner {
           width: 100%;
           max-width: 380px;
         }
-
+ 
         .auth-eyebrow {
           font-family: var(--font-ui);
           font-size: 0.65rem;
@@ -94,7 +166,7 @@ export default function RegisterPage() {
           align-items: center;
           gap: 0.75rem;
         }
-
+ 
         .auth-eyebrow::before {
           content: '';
           display: block;
@@ -102,7 +174,7 @@ export default function RegisterPage() {
           height: 1px;
           background: var(--gold);
         }
-
+ 
         .auth-title {
           font-family: var(--font-display);
           font-size: clamp(2rem, 3.5vw, 2.8rem);
@@ -112,12 +184,12 @@ export default function RegisterPage() {
           letter-spacing: -0.02em;
           margin-bottom: 0.5rem;
         }
-
+ 
         .auth-title em {
           font-style: italic;
           color: var(--muted);
         }
-
+ 
         .auth-subtitle {
           font-family: var(--font-body);
           font-size: 1rem;
@@ -125,7 +197,7 @@ export default function RegisterPage() {
           margin-bottom: 2.5rem;
           font-style: italic;
         }
-
+ 
         .auth-subtitle a {
           color: var(--gold);
           text-decoration: none;
@@ -133,24 +205,18 @@ export default function RegisterPage() {
           font-weight: 500;
           transition: opacity var(--transition);
         }
-
+ 
         .auth-subtitle a:hover { opacity: 0.7; }
-
+ 
         .field-group {
           display: flex;
           flex-direction: column;
           gap: 1.25rem;
           margin-bottom: 2rem;
         }
-
-        .field-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.25rem;
-        }
-
+ 
         .field-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
-
+ 
         .field-label {
           font-family: var(--font-ui);
           font-size: 0.65rem;
@@ -159,30 +225,31 @@ export default function RegisterPage() {
           text-transform: uppercase;
           color: var(--muted);
         }
-
+ 
         .field-input {
           width: 100%;
-          background: transparent;
-          border: none;
+          background: var(--card-bg);
+          border: 1px solid var(--border);
           border-bottom: 2px solid var(--border);
+          border-radius: 0;
           padding: 12px 0;
           font-size: 0.95rem;
           font-family: var(--font-ui);
           color: var(--black);
           outline: none;
           transition: border-color var(--transition);
+          background: transparent;
+          border-top: none;
+          border-left: none;
+          border-right: none;
         }
-
-        .field-input::placeholder {
-          color: var(--border);
-          font-style: italic;
-          font-family: var(--font-body);
-        }
-
+ 
+        .field-input::placeholder { color: var(--border); font-style: italic; font-family: var(--font-body); }
+ 
         .field-input:focus {
           border-bottom-color: var(--gold);
         }
-
+ 
         .auth-btn {
           width: 100%;
           padding: 15px;
@@ -201,15 +268,15 @@ export default function RegisterPage() {
           justify-content: center;
           gap: 0.75rem;
         }
-
+ 
         .auth-btn:hover:not(:disabled) {
           background: var(--gold);
           color: var(--black);
           border-color: var(--gold);
         }
-
+ 
         .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
+ 
         .btn-loader {
           display: inline-block;
           width: 12px; height: 12px;
@@ -218,9 +285,9 @@ export default function RegisterPage() {
           border-radius: 50%;
           animation: spin 0.7s linear infinite;
         }
-
+ 
         @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
         .auth-message {
           margin-top: 1.25rem;
           padding: 12px 16px;
@@ -229,132 +296,49 @@ export default function RegisterPage() {
           letter-spacing: 0.05em;
           border-left: 3px solid;
         }
-
+ 
         .auth-message.success {
           border-color: var(--gold);
           background: rgba(201,168,76,0.07);
           color: #7a6030;
         }
-
+ 
         .auth-message.error {
           border-color: #a05050;
           background: rgba(160,80,80,0.06);
           color: #a05050;
         }
-
-        /* Right decorative panel */
-        .auth-panel {
-          background: var(--black);
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 3rem;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .auth-panel::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(ellipse 50% 60% at 80% 20%, rgba(201,168,76,0.12) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 40% at 20% 85%, rgba(201,168,76,0.07) 0%, transparent 60%);
-          pointer-events: none;
-        }
-
-        .panel-logo {
-          font-family: var(--font-display);
-          font-size: 0.75rem;
-          letter-spacing: 0.55em;
-          color: var(--gold);
-          font-weight: 700;
-          text-transform: uppercase;
-          text-align: right;
-        }
-
-        .panel-headline {
-          position: relative;
-          z-index: 1;
-        }
-
-        .panel-headline h2 {
-          font-family: var(--font-display);
-          font-size: clamp(2.5rem, 3.5vw, 4rem);
-          font-weight: 900;
-          color: var(--cream);
-          line-height: 1.05;
-          letter-spacing: -0.02em;
-          margin-bottom: 1.25rem;
-        }
-
-        .panel-headline h2 em {
-          font-style: italic;
-          color: var(--gold);
-        }
-
-        .panel-headline p {
-          font-family: var(--font-body);
-          font-size: 1.1rem;
-          color: rgba(250,248,244,0.45);
-          line-height: 1.7;
-          font-style: italic;
-          max-width: 300px;
-        }
-
-        .panel-footer {
-          font-family: var(--font-ui);
-          font-size: 0.65rem;
-          letter-spacing: 0.2em;
-          color: rgba(250,248,244,0.25);
-          text-transform: uppercase;
-          text-align: right;
-        }
-
+ 
         @media (max-width: 768px) {
           .auth-root { grid-template-columns: 1fr; }
           .auth-panel { display: none; }
           .auth-form-side { padding: 2.5rem 1.5rem; align-items: flex-start; padding-top: 4rem; }
-          .field-row { grid-template-columns: 1fr; }
         }
       `}</style>
-
+ 
       <div className="auth-root">
-        {/* Left: Form */}
+        {/* Left decorative panel */}
+        <div className="auth-panel">
+          <div className="panel-logo">Maison</div>
+          <div className="panel-headline">
+            <h2>El estilo<br />es una forma<br />de <em>existir.</em></h2>
+            <p>Accede a tu colección personal y descubre nuevas prendas seleccionadas para ti.</p>
+          </div>
+          <div className="panel-footer">© 2025 Maison — Todos los derechos reservados</div>
+        </div>
+ 
+        {/* Right form */}
         <div className="auth-form-side">
           <div className="auth-inner">
-            <div className="auth-eyebrow">Nuevo miembro</div>
-            <h1 className="auth-title">Crear<br /><em>tu cuenta</em></h1>
+            <div className="auth-eyebrow">Acceso exclusivo</div>
+            <h1 className="auth-title">Bienvenido<br /><em>de nuevo</em></h1>
             <p className="auth-subtitle">
-              ¿Ya tienes cuenta?{" "}
-              <Link to="/login">Inicia sesión</Link>
+              ¿Sin cuenta aún?{" "}
+              <Link to="/registro">Regístrate aquí</Link>
             </p>
-
-            <form onSubmit={handleRegister}>
+ 
+            <form onSubmit={handleLogin}>
               <div className="field-group">
-                <div className="field-row">
-                  <div className="field-wrap">
-                    <label className="field-label">Nombre</label>
-                    <input
-                      type="text"
-                      placeholder="Juan"
-                      value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
-                      required
-                      className="field-input"
-                    />
-                  </div>
-                  <div className="field-wrap">
-                    <label className="field-label">Teléfono</label>
-                    <input
-                      type="tel"
-                      placeholder="3000000000"
-                      value={telefono}
-                      onChange={(e) => setTelefono(e.target.value)}
-                      className="field-input"
-                    />
-                  </div>
-                </div>
                 <div className="field-wrap">
                   <label className="field-label">Correo electrónico</label>
                   <input
@@ -380,26 +364,17 @@ export default function RegisterPage() {
               </div>
               <button type="submit" disabled={loading} className="auth-btn">
                 {loading && <span className="btn-loader" />}
-                {loading ? "Registrando..." : "Crear cuenta"}
+                {loading ? "Iniciando..." : "Iniciar sesión"}
               </button>
             </form>
-
+ 
             {message && (
               <div className={`auth-message ${messageType}`}>{message}</div>
             )}
           </div>
         </div>
-
-        {/* Right: Decorative */}
-        <div className="auth-panel">
-          <div className="panel-logo">Maison</div>
-          <div className="panel-headline">
-            <h2>La moda es<br />arte que se<br /><em>vive.</em></h2>
-            <p>Únete a nuestra comunidad y accede a una curaduría exclusiva diseñada para tu estilo.</p>
-          </div>
-          <div className="panel-footer">© 2025 Maison — Todos los derechos reservados</div>
-        </div>
       </div>
     </>
   );
 }
+ 
